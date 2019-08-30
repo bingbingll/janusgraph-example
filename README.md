@@ -55,7 +55,9 @@
 >>[tinkerpop-Gremlin](http://tinkerpop.apache.org/docs/3.4.1/reference/#tail-step)
 
 ## 基础环境及组件 ##
-Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat/.sh 两种文件即可。本项目基于centos7系统，Cassandra 单机，Elasticsearch 单机。我们这里为的是学习，组件越多问题越多，越不好排查，当使用熟练了可以进行集群，集群也很简单。这里需要你看下版本[兼容](https://docs.janusgraph.org/latest/version-compat.html)：
+Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat/.sh 两种文件即可。
+本项目基于centos7系统，Cassandra 单机，Elasticsearch 单机。我们这里为的是学习，组件越多问题越多，越不好排查，
+当使用熟练了可以进行集群，集群也很简单参靠我的集群搭建[链接]()。这里需要你看下版本[兼容](https://docs.janusgraph.org/latest/version-compat.html)：
 
 1. centos7.x 
 	1. 注意：先关闭防火墙-[防火墙参考](https://www.cnblogs.com/yyxq/p/10551274.html)
