@@ -74,8 +74,20 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 	1.  root 用户创建用户命令：`groupadd es;`、`useradd es -g es -p es;`、`chown -R es:es elasticsearch` 这一句要在janusgraph-0.4.0-hadoop2目录执行。
 
 ## 服务运行 ##
+登录centos系统，进入janusgraph-0.4.0-hadoop2/conf/gremlin-server 文件夹目录修改文件如下：
 
-# 实战 #
+- gremlin-server.yaml
+	- `host: 172.16.2.13` janusgraph所在的服务器IP，这样就可以在其他电脑上访问到了
+	- `channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer` 支持websocket和http
+
+- janusgraph-cql-es-server.properties
+	- `storage.hostname=172.16.2.138` 数据库所在的服务器IP，多个IP用,号隔开
+	- `storage.cql.keyspace=janusgraphtest` 自定义库名称
+	- `index.search.backend=elasticsearch` es无需改动
+	- `index.search.hostname=127.0.0.1` 使用的是自带的无需改动，若是有别的es改位其IP即可，多个IP用,号隔开  
+
+上面两个文件改完后保存，然后cd到/janusgraph-0.4.0-hadoop2/bin目录 输入 `nohup ./gremlin-server.sh conf/gremlin-server/gremlin-hbase-es-server.yaml ` 进行后台启动。
+
 
 ## Java代码编写 ##
 <font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
