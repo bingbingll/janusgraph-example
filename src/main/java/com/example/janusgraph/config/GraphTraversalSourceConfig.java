@@ -1,5 +1,6 @@
-package com.example.janusgraph;
+package com.example.janusgraph.config;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
@@ -7,6 +8,11 @@ import org.apache.tinkerpop.gremlin.driver.ser.Serializers;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
+import org.janusgraph.core.JanusGraph;
+import org.janusgraph.core.JanusGraphFactory;
+import org.janusgraph.core.schema.JanusGraphManagement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 
 import java.net.URLDecoder;
 
@@ -15,14 +21,16 @@ import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalS
 /**
  * @author 李兵
  * @version V1.0
- * @class_name GraphTraversalSourceConfig
- * @description TODO:
+ * @description TODO: 获取图对象配置
  * @date 2019/8/30 20:05
  */
+@Configuration
+@Log4j2
 public class GraphTraversalSourceConfig {
 
     /**
      * 基于官网介绍编写1
+     * TODO:需要修改 remote-graph.properties 配置文件的gremlin.remote.driver.clusterFile=值为绝对路径
      * @return
      * @throws Exception
      */
@@ -37,11 +45,14 @@ public class GraphTraversalSourceConfig {
 
     /**
      * 基于官网介绍编写2
+     * TODO:需要修改 remote-graph.properties 配置文件的gremlin.remote.driver.clusterFile=值为绝对路径
      * @return
      * @throws Exception
      */
     public GraphTraversalSource getGts2() throws Exception {
-        String path1 = Thread.currentThread().getContextClassLoader().getResource("conf/remote-graph.properties").getPath();
+        String path1 = Thread.currentThread()
+                .getContextClassLoader()
+                .getResource("conf/remote-graph.properties").getPath();
         GraphTraversalSource g = traversal().withRemote(java.net.URLDecoder.decode(path1.substring(1), "utf-8"));
         return g;
     }
@@ -49,10 +60,13 @@ public class GraphTraversalSourceConfig {
 
     /**
      * 基于官网介绍编写3
-     * @return
+     *
      */
     public GraphTraversalSource getGts3()  {
-        GraphTraversalSource g = traversal().withRemote(DriverRemoteConnection.using("172.16.2.137", 8182, "g"));
+        GraphTraversalSource g = traversal()
+                .withRemote(
+                        DriverRemoteConnection.using("172.16.2.137", 8182, "g")
+                );
         return g;
     }
 
@@ -89,6 +103,40 @@ public class GraphTraversalSourceConfig {
                         using(getClient(), "g")
                 );
         return g;
+    }
+
+
+
+
+    public JanusGraph getJanusGraph1() {
+        JanusGraphFactory.Builder build=JanusGraphFactory.build()
+                .set("storage.backend", "cql")
+                .set("storage.cassandra.keyspace", "test")
+                .set("storage.hostname", "172.16.2.138")
+                .set("storage.port", "9042")
+                .set("index.search.backend", "elasticsearch")
+                .set("index.search.hostname", "172.16.2.137")
+                .set("cache.db-cache", "true")
+                .set("cache.db-cache-time", "3000000")
+                .set("cache.db-cache-size", "0.25");
+        JanusGraph janusGraph = build.open();
+        boolean open = janusGraph.isOpen();
+        if (open){
+            System.out.println("janusgraph open");
+            return janusGraph;
+        }
+        return null;
+    }
+
+
+    @Autowired
+    GetGraphAndMgt getGraphAndMgt;
+
+    public JanusGraphManagement getJanusGraphManagement() {
+        return getGraphAndMgt.mgt;
+    }
+    public JanusGraph getJanusGraph() {
+        return getGraphAndMgt.graph;
     }
 
 

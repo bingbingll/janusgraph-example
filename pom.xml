@@ -41,8 +41,7 @@
             <scope>test</scope>
         </dependency>
 
-
-
+        <!--用于g对象操作的依赖-->
         <dependency>
             <groupId>org.apache.tinkerpop</groupId>
             <artifactId>gremlin-driver</artifactId>
@@ -53,7 +52,40 @@
             <artifactId>janusgraph-core</artifactId>
             <version>0.4.0</version>
         </dependency>
+<!--        用于引用app演示的依赖-->
+        <dependency>
+            <groupId>org.janusgraph</groupId>
+            <artifactId>example-common</artifactId>
+            <version>0.4.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.janusgraph</groupId>
+                    <artifactId>janusgraph-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
+<!--        用于添加schema，边，属性时获得mgt对象的依赖-->
+        <dependency>
+            <groupId>org.janusgraph</groupId>
+            <artifactId>janusgraph-cql</artifactId>
+            <version>0.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.janusgraph</groupId>
+            <artifactId>janusgraph-cassandra</artifactId>
+            <version>0.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.janusgraph</groupId>
+            <artifactId>janusgraph-es</artifactId>
+            <version>0.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>

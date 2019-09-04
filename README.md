@@ -36,7 +36,7 @@
 
 **用到的链接**
 >-- 官网地址：[官网](https://janusgraph.org/)  
->-- 官网文档：[文档](https://docs.janusgraph.org/latest/index.html)  
+>-- 官网文档：[文档](https://docs.janusgraph.org/) 或 [文档](https://docs.janusgraph.org/latest/index.html)
 >-- 源码网址: [GitHub](https://github.com/JanusGraph/janusgraph)  
 >-- 搭建形式：[官网](https://docs.janusgraph.org/latest/cassandra.html)  
 >-- Java-API：[官网](https://javadoc.io/doc/org.janusgraph/janusgraph-core/0.4.0)
@@ -70,8 +70,9 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 3. 下载Cassandra 上传至172.16.2.138 并解压
 	1. 启动: 后台启动->`bin/cassandra -R`  前台启动-> `./cassandra`
 	2. 停止：`pgrep -f CassandraDaemon`  `kill -9 [进程号]`
-4. 下载Elasticsearch，这里使用Janus graph自带的。出于安全原因，Elasticsearch必须在非root帐户下运行，所以需要手动添加用户进行启动脚本如下：
+4. 下载Elasticsearch。出于安全原因，Elasticsearch必须在非root帐户下运行，所以需要手动添加用户进行启动脚本如下：
 	1.  root 用户创建用户命令：`groupadd es;`、`useradd es -g es -p es;`、`chown -R es:es elasticsearch` 这一句要在janusgraph-0.4.0-hadoop2目录执行。
+	2.  后台启动 ./elastic -d
 
 ## 服务运行 ##
 登录centos系统，进入janusgraph-0.4.0-hadoop2/conf/gremlin-server 文件夹目录修改文件如下：
@@ -86,8 +87,10 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 	- `index.search.backend=elasticsearch` es无需改动
 	- `index.search.hostname=127.0.0.1` 使用的是自带的无需改动，若是有别的es改位其IP即可，多个IP用,号隔开  
 
-上面两个文件改完后保存，然后cd到/janusgraph-0.4.0-hadoop2/bin目录 输入 `nohup ./gremlin-server.sh conf/gremlin-server/gremlin-hbase-es-server.yaml ` 进行后台启动。
+上面两个文件改完后保存，然后cd到/janusgraph-0.4.0-hadoop2/bin目录 输入 `nohup ./gremlin-server.sh conf/gremlin-server/gremlin-server.yaml ` 进行后台启动。
 
 
 ## Java代码编写 ##
 <font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
+
+使用Java编写需要了解Schema模式，边，顶点，Java创建参考[这里](https://github.com/marcelocf/janusgraph_tutorial)介绍.
