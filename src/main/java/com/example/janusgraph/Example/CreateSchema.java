@@ -1,6 +1,7 @@
 package com.example.janusgraph.Example;
 
 import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.Multiplicity;
@@ -19,7 +20,7 @@ import static org.janusgraph.core.Multiplicity.MANY2ONE;
  * @date 2019/9/5 19:21
  */
 @Service
-@Log4j
+@Log4j2
 public class CreateSchema {
 
 

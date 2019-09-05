@@ -141,3 +141,5 @@ database downtime.** 这句话就是告诉我们Janus graph的团队要我们在
 可以根据（schema 介绍）这个节点的几个类进行编写，这里我选择JanusGraphApp.class 编写形式。为什么呢？原因为操作 JanusGraph有两套 API，
 分别是 Graph Structure（结构） 和 Graph Process（处理）。 建议只用 graph Structure来做图的模型定义及数据库管理相关操作。
 图的数据操作，包括创建、更新、删除及便利都用 g（ Graph Process）来操作。如果想用 API 来大批量地操作数据，可以跳过 JanusGraph，直接写入后端存储。
+创建schema参考本工程的com.example.janusgraph.Example.CreateSchema.java;
+图数据写入参考本工程的com.example.janusgraph.Example.GraphDataLand.java
