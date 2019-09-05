@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 /**
  * @author 李兵
  * @version V1.0
- * @class_name RemoteGraphApp
  * @description TODO:
  * @date 2019/8/30 18:13
  */

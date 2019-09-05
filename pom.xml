@@ -86,6 +86,13 @@
             <artifactId>janusgraph-es</artifactId>
             <version>0.4.0</version>
         </dependency>
+
+<!--用于测试展示的-->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

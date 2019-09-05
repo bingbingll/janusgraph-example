@@ -1,7 +1,7 @@
 package com.example.janusgraph;
 
 import com.example.janusgraph.config.GetGraphAndMgt;
-import com.example.janusgraph.config.GraphTraversalSourceConfig;
+import com.example.janusgraph.config.GraphSourceConfig;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
@@ -17,27 +17,28 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 初始化一个schema，并设定顶点，边，属性
  */
 @Log4j2
+
 public class InitSchemaExample {
     @Autowired
-    GraphTraversalSourceConfig graphSource;
+    GraphSourceConfig graphSource;
     /**
      * The index backend is identified by a key in the configuration; in our example we called it
      * <pre>search</pre>.
      * <br/>
      * Saving it in a static variable so we can reuse.
      */
-    private static final String BACKING_INDEX = "search";
+    public static final String BACKING_INDEX = "search";
 
-    private static final String USER = "user";
-    private static final String USER_NAME = "marcelocf.janusgraph.userName";
+    public static final String USER = "user";
+    public static final String USER_NAME = "marcelocf.janusgraph.userName";
 
-    private static final String STATUS_UPDATE = "statusUpdate";
-    private static final String CONTENT = "marcelocf.janusgraph.content";
+    public static final String STATUS_UPDATE = "statusUpdate";
+    public static final String CONTENT = "marcelocf.janusgraph.content";
 
-    private static final String CREATED_AT = "marcelocf.janusgraph.createdAt";
+    public static final String CREATED_AT = "marcelocf.janusgraph.createdAt";
 
-    private static final String POSTS = "posts";
-    private static final String FOLLOWS = "follows";
+    public static final String POSTS = "posts";
+    public static final String FOLLOWS = "follows";
 
 
     /**

@@ -1,23 +1,23 @@
 package com.example.janusgraph;
 
-import com.example.janusgraph.config.GraphTraversalSourceConfig;
+import com.example.janusgraph.config.GraphSourceConfig;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.janusgraph.core.JanusGraph;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Map;
 
-import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalSource.traversal;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class JanusgraphApplicationTests {
-    GraphTraversalSourceConfig config=new GraphTraversalSourceConfig();
+    GraphSourceConfig config=new GraphSourceConfig();
     @Test
     public void testAdd() throws Exception {
         GraphTraversalSource g = config.getGts1();
@@ -51,7 +51,7 @@ public class JanusgraphApplicationTests {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            GraphTraversalSourceConfig.close(g, client);
+            GraphSourceConfig.close(g, client);
         }
     }
 
@@ -76,5 +76,32 @@ public class JanusgraphApplicationTests {
         while (vmgt.hasNext()) {
             System.out.println(vmgt.next().toString());
         }
+    }
+
+    @Autowired
+    LandData loader;
+    @Autowired
+    GraphSourceConfig gsc;
+    @Test
+    public void landdata(){
+        JanusGraph janusGraph = gsc.getJanusGraph2();
+        Vertex[] vertices = loader.generateUsers(10, janusGraph);
+        loader.commit(janusGraph);
+
+        for(Vertex user: vertices) {
+            System.out.println("User: "+user.value(InitSchemaExample.USER_NAME).toString()+" -comments");
+            for(Vertex update: loader.generateStatusUpdates(user, 10,janusGraph)) {
+                System.out.println("--->"+update.value(InitSchemaExample.CONTENT).toString());
+            }
+            loader.commit(janusGraph);
+
+            System.out.println("User {} follows:"+user.value(InitSchemaExample.USER_NAME).toString());
+            Vertex[] vertices1 = loader.generateFollows(user, vertices, 5);
+            for(Vertex followedUser: vertices1) {
+                System.out.println("->"+followedUser.value(InitSchemaExample.USER_NAME).toString());
+            }
+            loader.commit(janusGraph);
+        }
+
     }
 }

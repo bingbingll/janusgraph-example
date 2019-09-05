@@ -26,7 +26,7 @@ import static org.apache.tinkerpop.gremlin.process.traversal.AnonymousTraversalS
  */
 @Configuration
 @Log4j2
-public class GraphTraversalSourceConfig {
+public class GraphSourceConfig {
 
     /**
      * 基于官网介绍编写1
@@ -84,7 +84,8 @@ public class GraphTraversalSourceConfig {
                 .maxInProcessPerConnection(15)
                 .maxWaitForConnection(3000)
                 .reconnectInterval(10)
-                .addContactPoint("172.16.2.137") //可配置多个,是你的janusgraph 的地址
+                //可配置多个,是你的janusgraph 的地址
+                .addContactPoint("172.16.2.137")
                 .port(8182)
                 .create();
     }
@@ -135,7 +136,7 @@ public class GraphTraversalSourceConfig {
     public JanusGraphManagement getJanusGraphManagement() {
         return getGraphAndMgt.mgt;
     }
-    public JanusGraph getJanusGraph() {
+    public JanusGraph getJanusGraph2() {
         return getGraphAndMgt.graph;
     }
 

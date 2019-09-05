@@ -12,7 +12,9 @@ import org.janusgraph.core.schema.ConsistencyModifier;
 import org.janusgraph.core.schema.JanusGraphIndex;
 import org.janusgraph.core.schema.JanusGraphManagement;
 import org.janusgraph.graphdb.database.StandardJanusGraph;
+import org.springframework.beans.factory.annotation.Configurable;
 
+@Configurable
 public class GraphOfTheGodsFactory {
     public static final String INDEX_NAME = "search";
     private static final String ERR_NO_INDEXING_BACKEND =
@@ -52,6 +54,7 @@ public class GraphOfTheGodsFactory {
         //Create Schema
         JanusGraphManagement management = graph.openManagement();
 
+        /**定义属性 Property Keys**/
         final PropertyKey name = management.makePropertyKey("name").dataType(String.class).make();
         JanusGraphManagement.IndexBuilder nameIndexBuilder = management.buildIndex("name", Vertex.class).addKey(name);
         if (uniqueNameCompositeIndex)
@@ -71,12 +74,14 @@ public class GraphOfTheGodsFactory {
         if (null != mixedIndexName)
             management.buildIndex("edges", Edge.class).addKey(reason).addKey(place).buildMixedIndex(mixedIndexName);
 
+        /**定义边Edge Labels**/
         //父亲
         management.makeEdgeLabel("father").multiplicity(Multiplicity.MANY2ONE).make();
         //母亲
         management.makeEdgeLabel("mother").multiplicity(Multiplicity.MANY2ONE).make();
         //作战
         EdgeLabel battled = management.makeEdgeLabel("battled").signature(time).make();
+        //给这个边创建索引
         management.buildEdgeIndex(battled, "battlesByTime", Direction.BOTH, Order.desc, time);
         //生活生命
         management.makeEdgeLabel("lives").signature(reason).make();
@@ -85,22 +90,25 @@ public class GraphOfTheGodsFactory {
         // 兄弟
         management.makeEdgeLabel("brother").make();
 
-
+        /**定义顶点 Vertex Lables 相当于顶一个类型*/
         management.makeVertexLabel("titan").make(); //
         management.makeVertexLabel("location").make(); //地点
         management.makeVertexLabel("god").make(); //神
         management.makeVertexLabel("demigod").make(); //半神
         management.makeVertexLabel("human").make(); //人
         management.makeVertexLabel("monster").make(); // 怪物
-
+        //提交
         management.commit();
+        /**Schema 创建完成**/
+
 
         JanusGraphTransaction tx = graph.newTransaction();
         // vertices
-
+        //创建一个name为saturn的顶点所属类型（标签）为titan 年龄为10000
         Vertex saturn = tx.addVertex(T.label, "titan", "name", "saturn", "age", 10000);
         Vertex sky = tx.addVertex(T.label, "location", "name", "sky");
         Vertex sea = tx.addVertex(T.label, "location", "name", "sea");
+        //创建一个名为jupiter（木星）所属类型为god年龄为5000
         Vertex jupiter = tx.addVertex(T.label, "god", "name", "jupiter", "age", 5000);
         Vertex neptune = tx.addVertex(T.label, "god", "name", "neptune", "age", 4500);
         Vertex hercules = tx.addVertex(T.label, "demigod", "name", "hercules", "age", 30);
@@ -112,27 +120,39 @@ public class GraphOfTheGodsFactory {
         Vertex tartarus = tx.addVertex(T.label, "location", "name", "tartarus");
 
         // edges
-
+        //为jupiter（木星）添加边及边的属性
+        //木星的父亲是Saturn（土星）
         jupiter.addEdge("father", saturn);
+        //木星生活账sky,原因是 的生活喜欢清新的微风
         jupiter.addEdge("lives", sky, "reason", "loves fresh breezes");
+        //木星的兄弟是 海王星
         jupiter.addEdge("brother", neptune);
+        //木星的另一个兄弟为冥王星
         jupiter.addEdge("brother", pluto);
 
+        //为neptune（海王星） 添加边及边的属性
+        //海王星生活中海中原因是他喜欢波浪
         neptune.addEdge("lives", sea).property("reason", "loves waves");
+        //海王星的兄弟是 木星
         neptune.addEdge("brother", jupiter);
+        //海王星的另一个兄弟是冥王星
         neptune.addEdge("brother", pluto);
 
+        //为hercules（大力神）添加边及边的属性
         hercules.addEdge("father", jupiter);
         hercules.addEdge("mother", alcmene);
         hercules.addEdge("battled", nemean, "time", 1, "place", Geoshape.point(38.1f, 23.7f));
         hercules.addEdge("battled", hydra, "time", 2, "place", Geoshape.point(37.7f, 23.9f));
         hercules.addEdge("battled", cerberus, "time", 12, "place", Geoshape.point(39f, 22f));
 
+        //为pluto（冥王星）添加边及边的属性
         pluto.addEdge("brother", jupiter);
         pluto.addEdge("brother", neptune);
         pluto.addEdge("lives", tartarus, "reason", "no fear of death");
         pluto.addEdge("pet", cerberus);
 
+        //为地狱狗添加边
+        //生活在塔耳塔洛斯
         cerberus.addEdge("lives", tartarus);
 
         // commit the transaction to disk
