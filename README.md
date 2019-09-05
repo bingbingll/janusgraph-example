@@ -115,7 +115,8 @@ database downtime.** 这句话就是告诉我们Janus graph的团队要我们在
 
 
 
-###代码编写
+###代码编写  
+
 <font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
 
 使用Java编写需要了解Schema模式，边，顶点，Java创建参考 [这里](https://github.com/marcelocf/janusgraph_tutorial)介绍.
