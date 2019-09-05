@@ -1,4 +1,4 @@
-package com.example.janusgraph;
+package com.example.janusgraph.titExample;
 
 import com.example.janusgraph.config.GetGraphAndMgt;
 import com.example.janusgraph.config.GraphSourceConfig;

@@ -1,6 +1,8 @@
 package com.example.janusgraph;
 
 import com.example.janusgraph.config.GraphSourceConfig;
+import com.example.janusgraph.titExample.InitSchemaExample;
+import com.example.janusgraph.titExample.LandDataExample;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
@@ -79,7 +81,7 @@ public class JanusgraphApplicationTests {
     }
 
     @Autowired
-    LandData loader;
+    LandDataExample loader;
     @Autowired
     GraphSourceConfig gsc;
     @Test

@@ -57,7 +57,7 @@
 ## 基础环境及组件 ##
 Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat/.sh 两种文件即可。
 本项目基于centos7系统，Cassandra 单机，Elasticsearch 单机。我们这里为的是学习，组件越多问题越多，越不好排查，
-当使用熟练了可以进行集群，集群也很简单参靠我的集群搭建[链接](https://github.com/bingbingll/janusgraph-dome/blob/master/集群搭建.md)。
+当使用熟练了可以进行集群，集群也很简单参考集[链接](https://github.com/bingbingll/janusgraph-dome/blob/master/集群搭建.md)。
 这里需要你看下版本[兼容](https://docs.janusgraph.org/latest/version-compat.html)：
 
 1. centos7.x 
@@ -93,10 +93,13 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 
 
 ## Java代码编写 ##
+<font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
+
 ### schema 介绍
 &emsp;&emsp;首先这里需要先了解一下Janus graph中schema的概念，若是schema概念没弄明白后续跟没法学习应用了。
-若您的英语很好可以先在官网文档-[链接](https://docs.janusgraph.org/basics/schema/)-中对于schema的阐述进行了解（反正我只是看个大概脑子稀里糊涂的）。 
- 
+若您的英语很好可以先在官网文档-[链接](https://docs.janusgraph.org/basics/schema/)-中对于schema的阐述进行了解（反正我只是看个大概脑子稀里糊涂的）。
+还可以参考[链接](https://www.cnblogs.com/jiyuqi/p/7127178.html?utm_source=itdadao&utm_medium=referral) 介绍。  
+  
 &emsp;&emsp;官网文档说到**The schema type - i.e. edge label, property key,or vertex label - is assigned to elements 
 in the graph - i.e. edge, properties or vertices respectively - when they are first created. 
 The assigned schema type cannot be changed for a particular element. This ensures a stable type system that is easy to reason about.**
@@ -113,12 +116,7 @@ database downtime.** 这句话就是告诉我们Janus graph的团队要我们在
 目录下的GraphOfTheGodsFactory.java和RemoteGraphApp.java 或 RemoteGraphApp.java 继承的JanusGraphApp.class 进行深刻理解，
 然后根据你所在的业务场景进行选择。
 
-
-
-### 代码编写 
-
-<font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
-
+### 示例介绍 
 使用Java编写需要了解Schema模式，边，顶点，Java创建参考 [这里](https://github.com/marcelocf/janusgraph_tutorial)介绍.
 然后进行查看步骤  
 1. 启动 Gremlin Console：./gremlin.sh  启动控制台命令，
@@ -137,3 +135,9 @@ database downtime.** 这句话就是告诉我们Janus graph的团队要我们在
     - 根据主键查看属性:mgmt.getPropertyKey('marcelocf.janusgraph.userName')
         - ==>marcelocf.janusgraph.userName
 3. 获取图遍历句柄：gremlin> g = graph.traversal()
+
+### 实战介绍
+#### 创建schema
+可以根据（schema 介绍）这个节点的几个类进行编写，这里我选择JanusGraphApp.class 编写形式。为什么呢？原因为操作 JanusGraph有两套 API，
+分别是 Graph Structure（结构） 和 Graph Process（处理）。 建议只用 graph Structure来做图的模型定义及数据库管理相关操作。
+图的数据操作，包括创建、更新、删除及便利都用 g（ Graph Process）来操作。如果想用 API 来大批量地操作数据，可以跳过 JanusGraph，直接写入后端存储。

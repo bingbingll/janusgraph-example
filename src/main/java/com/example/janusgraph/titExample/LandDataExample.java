@@ -1,4 +1,4 @@
-package com.example.janusgraph;
+package com.example.janusgraph.titExample;
 
 import com.github.javafaker.Faker;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -13,7 +13,7 @@ import java.util.Date;
  *
  */
 @Component
-public class LandData {
+public class LandDataExample {
 
     private final Faker faker;
     private final Date oneMonthAgo;
@@ -21,7 +21,7 @@ public class LandData {
     /**
      * 初始化
      */
-    public LandData() {
+    public LandDataExample() {
         this.faker=new Faker();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -1);
