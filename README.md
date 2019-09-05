@@ -94,28 +94,31 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 
 ## Java代码编写 ##
 ### schema 介绍
-首先这里需要先了解一下Janus graph中schema的概念，若是schema概念没弄明白后续跟没法学习应用了。
-若您的英语很好可以先在官网文档-[链接](https://docs.janusgraph.org/basics/schema/)-中对于schema的阐述进行了解（反正我只是看个大概脑子稀里糊涂的）。  
-需要在你的脑海中记住这句话 **The schema type - i.e. edge label, property key,or vertex label - is assigned to elements 
+&emsp;&emsp;首先这里需要先了解一下Janus graph中schema的概念，若是schema概念没弄明白后续跟没法学习应用了。
+若您的英语很好可以先在官网文档-[链接](https://docs.janusgraph.org/basics/schema/)-中对于schema的阐述进行了解（反正我只是看个大概脑子稀里糊涂的）。 
+ 
+&emsp;&emsp;官网文档说到**The schema type - i.e. edge label, property key,or vertex label - is assigned to elements 
 in the graph - i.e. edge, properties or vertices respectively - when they are first created. 
 The assigned schema type cannot be changed for a particular element. This ensures a stable type system that is easy to reason about.**
 什么意思呢？根据我的理解；就是说一个schema就一个图，这个图在创建时需要指定图中的边，属性或顶点的定义。换句话说在我们在关系型数据库中，
 一个图就是一个表，创建一个表时要给这个表设定一个表名，列名及列的类型，值是否为空，是否为主键的意思！这样说同学你是否有种豁然开朗的感觉呢？  
-在引用官网的一句话**Each JanusGraph graph has a schema comprised of the edge labels, property keys, and vertex labels used therein. 
+
+&emsp;&emsp;在引用官网的一句话**Each JanusGraph graph has a schema comprised of the edge labels, property keys, and vertex labels used therein. 
 A JanusGraph schema can either be explicitly or implicitly defined. Users are encouraged to explicitly define the graph schema 
 during application development. An explicitly defined schema is an important component of a robust graph application and 
 greatly improves collaborative software development. Note, that a JanusGraph schema can be evolved over time without any 
 interruption of normal database operations. Extending the schema does not slow down query answering and does not require 
 database downtime.** 这句话就是告诉我们Janus graph的团队要我们在创建图时显示地定义（就是通过配置文件或Java定义变量）schema（图）的三个元素，
-当然也可以不显示的定义，在后续程序编写时来定义。这个方式通过g对象创建、通过http服务式创建等。
-可以参考本工程的com.example.janusgraph.referenceExample目录下的GraphOfTheGodsFactory.java和RemoteGraphApp.java 或 
-RemoteGraphApp.java 继承的JanusGraphApp.class 进行深刻理解，然后根据你所在的业务场景进行选择。
+也可以不显示的定义，在后续程序编写时来定义。这个方式通过g对象创建、通过http服务式创建等。可以参考本工程的com.example.janusgraph.referenceExample
+目录下的GraphOfTheGodsFactory.java和RemoteGraphApp.java 或 RemoteGraphApp.java 继承的JanusGraphApp.class 进行深刻理解，
+然后根据你所在的业务场景进行选择。
 
 
 
 ###代码编写
 <font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
-使用Java编写需要了解Schema模式，边，顶点，Java创建参考[这里](https://github.com/marcelocf/janusgraph_tutorial)介绍.
+
+使用Java编写需要了解Schema模式，边，顶点，Java创建参考 [这里](https://github.com/marcelocf/janusgraph_tutorial)介绍.
 然后进行查看步骤  
 1. 启动 Gremlin Console：./gremlin.sh  启动控制台命令，
 2. 开启一个图数据库实例：gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql-es.properties')；
