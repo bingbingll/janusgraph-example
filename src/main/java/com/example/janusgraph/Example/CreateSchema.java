@@ -57,7 +57,8 @@ public class CreateSchema {
      *
      *     ONE2ONE：某verex中具有同样Label的edge，只能有最多一个incoming edge和最多一个outgoing edge。
      *
-     * todo:默认的多样性设置为MULTI
+     * todo:默认的多样性设置为MULTI。
+     * todo:具体参考这位同学写的链接：https://www.cnblogs.com/jiyuqi/p/7127178.html?utm_source=itdadao&utm_medium=referral
      *
      * @param management
      */
