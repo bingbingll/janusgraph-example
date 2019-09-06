@@ -5,6 +5,8 @@ import com.example.janusgraph.Example.GraphDataLand;
 import com.example.janusgraph.config.GraphSourceConfig;
 import com.example.janusgraph.config.JanusGraphConfig;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
+import org.apache.tinkerpop.gremlin.structure.Transaction;
+import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.schema.JanusGraphManagement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,14 +38,21 @@ public class ExamplTest {
      */
     @Test
     public void testSchema(){
-        JanusGraphManagement mgt = janusGraphConfig.mgt;
-        schema.createProperties(mgt);
-        schema.createVertexLabels(mgt);
-        schema.createEdgeLabels(mgt);
-        schema.createCompositeIndexes(mgt);
-        schema.createMixedIndexes(mgt);
-        mgt.commit();
-        janusGraphConfig.close();
+
+        try {
+            JanusGraphManagement mgt = janusGraphConfig.mgt;
+            schema.createProperties(mgt);
+            schema.createVertexLabels(mgt);
+            schema.createEdgeLabels(mgt);
+            schema.createCompositeIndexes(mgt);
+            schema.createMixedIndexes(mgt);
+            mgt.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            janusGraphConfig.rollback();
+        }finally {
+            janusGraphConfig.close();
+        }
     }
 
     /**

@@ -129,7 +129,7 @@ public class GraphDataLand {
 
 
         /******创建公司*******/
-        Vertex pingguobus = g.addV(b.of(LABEL, SchemaVertex.COMPANY))
+        Vertex apple = g.addV(b.of(LABEL, SchemaVertex.COMPANY))
                 .property(SchemaProperties.NAME, b.of(SchemaProperties.NAME, "苹果科技公司"))
                 .property(SchemaProperties.PHONE, b.of(SchemaProperties.PHONE, "010-11111111"))
                 .property(SchemaProperties.ID, b.of(SchemaProperties.ID, "1111"))
@@ -157,11 +157,32 @@ public class GraphDataLand {
                 .property(SchemaProperties.PLACE, b.of(SchemaProperties.PLACE, Geoshape.point(28.3f, 39.6f)))
                 .next();
 
-        /*****创建点与点的关系*****/
-        g.V(b.of(OUT_V, zhangming)).as("zm")
-                .V(b.of(IN_V, zhanghan))
-                .addE(b.of(LABEL, "father"))
-                .from("zm").next();
+        /** 创建点与点的关系 */
+
+        g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, zhanghan)).addE(b.of(LABEL, "father")).from("a").next();
+        g.V(b.of(OUT_V,zhangming)).as("a").V(b.of(IN_V,zhangxin)).addE(b.of(LABEL, "mother")).from("a").next();
+        g.V(b.of(OUT_V,zhangming)).as("a").V(b.of(IN_V,zhaoshi)).addE(b.of(LABEL, "brother")).from("a").next();
+        g.V(b.of(OUT_V,zhangming)).as("a").V(b.of(IN_V,apple)).addE(b.of(LABEL, "belong")).from("a").next();
+
+        g.V(b.of(OUT_V, zhaoshi)).as("a").V(b.of(IN_V, zhanghan)).addE(b.of(LABEL, "father")).from("a").next();
+        g.V(b.of(OUT_V,zhaoshi)).as("a").V(b.of(IN_V,zhangxin)).addE(b.of(LABEL, "mother")).from("a").next();
+        g.V(b.of(OUT_V,zhaoshi)).as("a").V(b.of(IN_V,zhangming)).addE(b.of(LABEL, "brother")).from("a").next();
+        g.V(b.of(OUT_V,zhaoshi)).as("a").V(b.of(IN_V,apple)).addE(b.of(LABEL, "belong")).from("a").next();
+
+
+        g.V(b.of(OUT_V,wanglei)).as("a").V(b.of(IN_V,zhaoshi)).addE(b.of(LABEL, "brother")).from("a").next();
+        g.V(b.of(OUT_V,wanglei)).as("a").V(b.of(IN_V,apple)).addE(b.of(LABEL, "belong")).from("a").next();
+
+        g.V(b.of(OUT_V,lixin)).as("a").V(b.of(IN_V,ibm)).addE(b.of(LABEL, "belong")).from("a").next();
+        g.V(b.of(OUT_V,lixin)).as("a").V(b.of(IN_V,liyan)).addE(b.of(LABEL, "brother")).from("a").next();
+
+        g.V(b.of(OUT_V,liyan)).as("a").V(b.of(IN_V,lixin)).addE(b.of(LABEL, "brother")).from("a").next();
+        g.V(b.of(OUT_V,liyan)).as("a").V(b.of(IN_V,apple)).addE(b.of(LABEL, "belong")).from("a").next();
+
+
+
+        g.V(b.of(OUT_V,apple)).as("a").V(b.of(IN_V,adrs1)).addE(b.of(LABEL, "belong")).from("a").next();
+        g.V(b.of(OUT_V,ibm)).as("a").V(b.of(IN_V,adrs2)).addE(b.of(LABEL, "belong")).from("a").next();
 
     }
 }

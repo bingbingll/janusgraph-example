@@ -1,6 +1,7 @@
 package com.example.janusgraph.config;
 
 import lombok.extern.log4j.Log4j2;
+import org.apache.tinkerpop.gremlin.structure.Transaction;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.janusgraph.core.schema.JanusGraphManagement;
@@ -67,6 +68,11 @@ public class JanusGraphConfig {
 
     public void close() {
         graph.close();
+    }
+
+    public void rollback(){
+        Transaction tx = graph.tx();
+        tx.rollback();
     }
 
 /**此方法也可以获取**/

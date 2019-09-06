@@ -32,7 +32,7 @@ public class CreateSchema {
      * @param management
      */
     public void createVertexLabels(JanusGraphManagement management) {
-        management.makeVertexLabel(SchemaVertex.COMPANY).make();
+        management.makeVertexLabel(SchemaVertex.PERSON).make();
         management.makeVertexLabel(SchemaVertex.LOCALHOST).make();
         management.makeVertexLabel(SchemaVertex.COMPANY).make();
     }
@@ -91,7 +91,7 @@ public class CreateSchema {
         management.makeEdgeLabel("mother").multiplicity(MANY2ONE).make();
         //兄弟或平辈
         management.makeEdgeLabel("brother").make();
-        //归属，及人属于哪个公司，公司中都有谁
+        //归属，人属于哪个公司，公司中都有谁 公司地点在哪里
         management.makeEdgeLabel("belong").make();
     }
 
@@ -142,12 +142,12 @@ public class CreateSchema {
                     .addKey(management.getPropertyKey("id"))
                     .buildMixedIndex(this.mixedIndexConfigName);
 
-            management.buildIndex("byNaFaMaBaB", Edge.class)
+            management.buildIndex("byNANIP", Edge.class)
                     .addKey(management.getPropertyKey("name"))
-                    .addKey(management.getPropertyKey("father"))
-                    .addKey(management.getPropertyKey("mother"))
-                    .addKey(management.getPropertyKey("brother"))
-                    .addKey(management.getPropertyKey("belong"))
+                    .addKey(management.getPropertyKey("age"))
+                    .addKey(management.getPropertyKey("no"))
+                    .addKey(management.getPropertyKey("id"))
+                    .addKey(management.getPropertyKey("place"))
                     .buildMixedIndex(this.mixedIndexConfigName);
         }
 

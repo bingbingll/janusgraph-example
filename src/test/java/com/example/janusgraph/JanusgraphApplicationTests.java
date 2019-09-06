@@ -80,30 +80,4 @@ public class JanusgraphApplicationTests {
         }
     }
 
-    @Autowired
-    LandDataExample loader;
-    @Autowired
-    GraphSourceConfig gsc;
-    @Test
-    public void landdata(){
-        JanusGraph janusGraph = gsc.getJanusGraph2();
-        Vertex[] vertices = loader.generateUsers(10, janusGraph);
-        loader.commit(janusGraph);
-
-        for(Vertex user: vertices) {
-            System.out.println("User: "+user.value(InitSchemaExample.USER_NAME).toString()+" -comments");
-            for(Vertex update: loader.generateStatusUpdates(user, 10,janusGraph)) {
-                System.out.println("--->"+update.value(InitSchemaExample.CONTENT).toString());
-            }
-            loader.commit(janusGraph);
-
-            System.out.println("User {} follows:"+user.value(InitSchemaExample.USER_NAME).toString());
-            Vertex[] vertices1 = loader.generateFollows(user, vertices, 5);
-            for(Vertex followedUser: vertices1) {
-                System.out.println("->"+followedUser.value(InitSchemaExample.USER_NAME).toString());
-            }
-            loader.commit(janusGraph);
-        }
-
-    }
 }
