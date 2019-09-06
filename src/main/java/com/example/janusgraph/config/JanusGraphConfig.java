@@ -17,7 +17,7 @@ import java.net.URLDecoder;
  */
 @Configuration
 @Log4j2
-public class GetGraphAndMgt {
+public class JanusGraphConfig {
     public final JanusGraph graph;
 
     public final JanusGraphManagement mgt;
@@ -28,7 +28,7 @@ public class GetGraphAndMgt {
      * Initialize the graph and the graph management interface.
      * 使用无参构造
      */
-    public GetGraphAndMgt() {
+    public JanusGraphConfig() {
         try {
 //            this.dropOldKeyspace();
         } catch (Exception ex) {
@@ -45,7 +45,7 @@ public class GetGraphAndMgt {
             decode = URLDecoder.decode(path);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("获取配置文件路径错误原因："+e.getLocalizedMessage());
+            log.error("获取配置文件路径错误原因：" + e.getLocalizedMessage());
         }
         log.info("Connecting graph");
         graph = JanusGraphFactory.open(decode);
@@ -53,7 +53,7 @@ public class GetGraphAndMgt {
         mgt = graph.openManagement();
     }
 
-//    private void dropOldKeyspace() {
+    //    private void dropOldKeyspace() {
 //        TTransport tr = new TFramedTransport(new TSocket("localhost", 9160));
 //        TProtocol proto = new TBinaryProtocol(tr);
 //        Cassandra.Client client = new Cassandra.Client(proto);
@@ -62,5 +62,31 @@ public class GetGraphAndMgt {
 //        client.system_drop_keyspace(JANUSGRAPH);
 //        LOGGER.info("DROPPED keyspace janusgraph");
 //        tr.close();
+//    }
+
+
+    public void close() {
+        graph.close();
+    }
+
+/**此方法也可以获取**/
+//    public JanusGraph getJanusGraph1() {
+//        JanusGraphFactory.Builder build = JanusGraphFactory.build()
+//                .set("storage.backend", "cql")
+//                .set("storage.cassandra.keyspace", "test")
+//                .set("storage.hostname", "172.16.2.138")
+//                .set("storage.port", "9042")
+//                .set("index.search.backend", "elasticsearch")
+//                .set("index.search.hostname", "172.16.2.137")
+//                .set("cache.db-cache", "true")
+//                .set("cache.db-cache-time", "3000000")
+//                .set("cache.db-cache-size", "0.25");
+//        JanusGraph janusGraph = build.open();
+//        boolean open = janusGraph.isOpen();
+//        if (open) {
+//            System.out.println("janusgraph open");
+//            return janusGraph;
+//        }
+//        return null;
 //    }
 }

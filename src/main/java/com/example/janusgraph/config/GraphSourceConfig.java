@@ -109,39 +109,7 @@ public class GraphSourceConfig {
 
 
 
-    public JanusGraph getJanusGraph1() {
-        JanusGraphFactory.Builder build=JanusGraphFactory.build()
-                .set("storage.backend", "cql")
-                .set("storage.cassandra.keyspace", "test")
-                .set("storage.hostname", "172.16.2.138")
-                .set("storage.port", "9042")
-                .set("index.search.backend", "elasticsearch")
-                .set("index.search.hostname", "172.16.2.137")
-                .set("cache.db-cache", "true")
-                .set("cache.db-cache-time", "3000000")
-                .set("cache.db-cache-size", "0.25");
-        JanusGraph janusGraph = build.open();
-        boolean open = janusGraph.isOpen();
-        if (open){
-            System.out.println("janusgraph open");
-            return janusGraph;
-        }
-        return null;
-    }
-
-
-    @Autowired
-    GetGraphAndMgt getGraphAndMgt;
-
-    public JanusGraphManagement getJanusGraphManagement() {
-        return getGraphAndMgt.mgt;
-    }
-    public JanusGraph getJanusGraph2() {
-        return getGraphAndMgt.graph;
-    }
-
-
-    public static void close(GraphTraversalSource g, Client client) {
+    public void close(GraphTraversalSource g, Client client) {
         try {
             g.close();
             client.close();
@@ -149,4 +117,5 @@ public class GraphSourceConfig {
             e.printStackTrace();
         }
     }
+
 }

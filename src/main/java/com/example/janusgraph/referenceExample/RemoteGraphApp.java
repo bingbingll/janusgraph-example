@@ -107,7 +107,11 @@ public class RemoteGraphApp extends JanusGraphApp {
         Vertex cerberus = g.addV(b.of(LABEL, "monster")).property(NAME, b.of(NAME, "cerberus")).next();
         Vertex tartarus = g.addV(b.of(LABEL, "location")).property(NAME, b.of(NAME, "tartarus")).next();
 
-        g.V(b.of(OUT_V, jupiter)).as("a").V(b.of(IN_V, saturn)).addE(b.of(LABEL, "father")).from("a").next();
+        g.V(b.of(OUT_V, jupiter)).as("a") //木星出边
+                .V(b.of(IN_V, saturn)) //土星入边
+                .addE(b.of(LABEL, "father")) //定义关系为父亲
+                .from("a").next(); //数据提交
+
         g.V(b.of(OUT_V, jupiter)).as("a").V(b.of(IN_V, sky)).addE(b.of(LABEL, "lives"))
                 .property(REASON, b.of(REASON, "loves fresh breezes")).from("a").next();
         g.V(b.of(OUT_V, jupiter)).as("a").V(b.of(IN_V, neptune)).addE(b.of(LABEL, "brother")).from("a").next();

@@ -1,6 +1,6 @@
 package com.example.janusgraph.titExample;
 
-import com.example.janusgraph.config.GetGraphAndMgt;
+import com.example.janusgraph.config.JanusGraphConfig;
 import com.example.janusgraph.config.GraphSourceConfig;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -116,7 +116,7 @@ public class InitSchemaExample {
 
 
     public static void main(String[] args) {
-        GetGraphAndMgt getGraphAndMgt = new GetGraphAndMgt();
+        JanusGraphConfig getGraphAndMgt = new JanusGraphConfig();
         JanusGraphManagement mgt = getGraphAndMgt.mgt;
         JanusGraph graph = getGraphAndMgt.graph;
         InitSchemaExample jgExample = new InitSchemaExample();

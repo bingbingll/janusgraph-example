@@ -58,7 +58,7 @@
 Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat/.sh 两种文件即可。
 本项目基于centos7系统，Cassandra 单机，Elasticsearch 单机。我们这里为的是学习，组件越多问题越多，越不好排查，
 当使用熟练了可以进行集群，集群也很简单参考集[链接](https://github.com/bingbingll/janusgraph-dome/blob/master/集群搭建.md)。
-这里需要你看下版本[兼容](https://docs.janusgraph.org/latest/version-compat.html)：
+这里需要你看下版本[兼容](https://docs.janusgraph.org/changelog/)：
 
 1. centos7.x 
 	1. 注意：先关闭防火墙-[防火墙参考](https://www.cnblogs.com/yyxq/p/10551274.html)
@@ -71,59 +71,32 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 	1. 启动: 后台启动->`bin/cassandra -R`  前台启动-> `./cassandra`
 	2. 停止：`pgrep -f CassandraDaemon`  `kill -9 [进程号]`
 4. 下载Elasticsearch。出于安全原因，Elasticsearch必须在非root帐户下运行，所以需要手动添加用户进行启动脚本如下：
-	1. root 用户创建用户命令：`groupadd es;`、`useradd es -g es -p es;`、`chown -R es:es elasticsearch` 
-	这一句要在janusgraph-0.4.0-hadoop2目录执行。
-	2. 后台启动： ./elastic -d
-	3. 停止：ps -ef | grep elastic kill -9 [进程号]
+	1. root 用户创建用户命令：`groupadd es;`、`useradd es -g es -p es;`、`chown -R es:es elasticsearch` 这一句要在janusgraph-0.4.0-hadoop2目录执行。
+	2. centos需要修改以下参数；root 用户下 修改配置文件  `vi /etc/security/limits.conf` 最后一行增加 `* soft nofile 65536 * hard nofile 131072`  ，保存退出后，在修改 `vi /etc/sysctl.conf` 最后一行追加 `vm.max_map_count=655360` 然后保存退出，执行 `sysctl -p`
+	3. 后台启动： ./elastic -d
+	4. 停止：ps -ef | grep elastic kill -9 [进程号]
 
 ## 服务运行 ##
 登录centos系统，进入janusgraph-0.4.0-hadoop2/conf/gremlin-server 文件夹目录修改文件如下：
 
-- gremlin-server.yaml
-	- `host: 172.16.2.13` janusgraph所在的服务器IP，这样就可以在其他电脑上访问到了
-	- `channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer` 支持websocket和http
+1. 服务式启动（Java程序调用必须启动）
+	- gremlin-server.yaml
+		- `host: 172.16.2.13` janusgraph所在的服务器IP，这样就可以在其他电脑上访问到了
+		- `channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer` 支持websocket和http
+ 	- janusgraph-cql-es-server.properties
+		- `storage.hostname=172.16.2.138` 数据库所在的服务器IP，多个IP用,号隔开
+		- `storage.cql.keyspace=janusgraphtest` 自定义库名称
+		- `index.search.backend=elasticsearch` es无需改动
+		- `index.search.hostname=127.0.0.1` 使用的是自带的无需改动，若是有别的es改位其IP即可，多个IP用,号隔开  
+	- 上面两个文件改完后保存，然后cd到/janusgraph-0.4.0-hadoop2/bin目录 输入 `nohup ./gremlin-server.sh conf/gremlin-server/gremlin-server.yaml` 进行后台启动。
 
-- janusgraph-cql-es-server.properties
-	- `storage.hostname=172.16.2.138` 数据库所在的服务器IP，多个IP用,号隔开
-	- `storage.cql.keyspace=janusgraphtest` 自定义库名称
-	- `index.search.backend=elasticsearch` es无需改动
-	- `index.search.hostname=127.0.0.1` 使用的是自带的无需改动，若是有别的es改位其IP即可，多个IP用,号隔开  
-
-上面两个文件改完后保存，然后cd到/janusgraph-0.4.0-hadoop2/bin目录 输入 `nohup ./gremlin-server.sh conf/gremlin-server/gremlin-server.yaml ` 进行后台启动。
 
 
-## Java代码编写 ##
-<font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
-
-### schema 介绍
-&emsp;&emsp;首先这里需要先了解一下Janus graph中schema的概念，若是schema概念没弄明白后续跟没法学习应用了。
-若您的英语很好可以先在官网文档-[链接](https://docs.janusgraph.org/basics/schema/)-中对于schema的阐述进行了解（反正我只是看个大概脑子稀里糊涂的）。
-还可以参考[链接](https://www.cnblogs.com/jiyuqi/p/7127178.html?utm_source=itdadao&utm_medium=referral) 介绍。  
-  
-&emsp;&emsp;官网文档说到**The schema type - i.e. edge label, property key,or vertex label - is assigned to elements 
-in the graph - i.e. edge, properties or vertices respectively - when they are first created. 
-The assigned schema type cannot be changed for a particular element. This ensures a stable type system that is easy to reason about.**
-什么意思呢？根据我的理解；就是说一个schema就一个图，这个图在创建时需要指定图中的边，属性或顶点的定义。换句话说在我们在关系型数据库中，
-一个图就是一个表，创建一个表时要给这个表设定一个表名，列名及列的类型，值是否为空，是否为主键的意思！这样说同学你是否有种豁然开朗的感觉呢？  
-
-&emsp;&emsp;在引用官网的一句话**Each JanusGraph graph has a schema comprised of the edge labels, property keys, and vertex labels used therein. 
-A JanusGraph schema can either be explicitly or implicitly defined. Users are encouraged to explicitly define the graph schema 
-during application development. An explicitly defined schema is an important component of a robust graph application and 
-greatly improves collaborative software development. Note, that a JanusGraph schema can be evolved over time without any 
-interruption of normal database operations. Extending the schema does not slow down query answering and does not require 
-database downtime.** 这句话就是告诉我们Janus graph的团队要我们在创建图时显示地定义（就是通过配置文件或Java定义变量）schema（图）的三个元素，
-也可以不显示的定义，在后续程序编写时来定义。这个方式通过g对象创建、通过http服务式创建等。可以参考本工程的com.example.janusgraph.referenceExample
-目录下的GraphOfTheGodsFactory.java和RemoteGraphApp.java 或 RemoteGraphApp.java 继承的JanusGraphApp.class 进行深刻理解，
-然后根据你所在的业务场景进行选择。
-
-### 示例介绍 
-使用Java编写需要了解Schema模式，边，顶点，Java创建参考 [这里](https://github.com/marcelocf/janusgraph_tutorial)介绍.
-然后进行查看步骤  
-1. 启动 Gremlin Console：./gremlin.sh  启动控制台命令，
-2. 开启一个图数据库实例：gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql-es.properties')；
-注意这里的配置文件内容要和conf/gremlin-server/janusgraph-cql-es-server.properties的内容一致。
-3. 获取管理对象：gremlin> mgmt = graph.openManagement()
-    - 查看所有的顶点标签： gremlin> labels = mgmt.getVertexLabels()
+2. 控制台式启动（主要用于控制台查看学习用）
+	- 启动 Gremlin Console：./gremlin.sh  启动控制台命令
+	- 开启一个图数据库实例：gremlin> graph = JanusGraphFactory.open('conf/janusgraph-cql-es.properties')；注意这里的配置文件内容要和conf/gremlin-server/janusgraph-cql-es-server.properties的内容一致
+	- 获取管理对象：gremlin> mgmt = graph.openManagement()
+	- 查看所有的顶点标签： gremlin> labels = mgmt.getVertexLabels()
         - ==>user  
           ==>statusUpdate
     - 查看所有的边：mgmt.getRelationTypes(EdgeLabel.class)
@@ -134,12 +107,25 @@ database downtime.** 这句话就是告诉我们Janus graph的团队要我们在
           ==>mother
     - 根据主键查看属性:mgmt.getPropertyKey('marcelocf.janusgraph.userName')
         - ==>marcelocf.janusgraph.userName
-3. 获取图遍历句柄：gremlin> g = graph.traversal()
+    - 获取图遍历句柄：gremlin> g = graph.traversal()
 
-### 实战介绍
-#### 创建schema
+## Java代码编写 ##
+<font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
+
+### schema 介绍
+&emsp;&emsp;首先这里需要先了解一下Janus graph中schema的概念，若是schema概念没弄明白后续跟没法学习应用了。
+若您的英语很好可以先在官网文档-[链接](https://docs.janusgraph.org/basics/schema/)-中对于schema的阐述进行了解（反正我只是看个大概脑子稀里糊涂的）。
+还可以参考[链接](https://www.cnblogs.com/jiyuqi/p/7127178.html?utm_source=itdadao&utm_medium=referral) 介绍。  
+  
+&emsp;&emsp;官网文档说到**The schema type - i.e. edge label, property key,or vertex label - is assigned to elements in the graph - i.e. edge, properties or vertices respectively - when they are first created. The assigned schema type cannot be changed for a particular element. This ensures a stable type system that is easy to reason about.** 什么意思呢？根据我的理解，schema（模型）！用于描述定义一个图中的数据是什么样子的，数据依据此定义进行数据制作从而完成一个图。因此创建schema（模型）时需要先定义图中顶点（vertex）、边（edge）和属性（property）然后才能组成一个schema。在图逻辑中，vertex描述为每个单独的实体（相当于实体，抽象出来的一个类别，例如人，公司，地点等等），edge作为连接2个以上的vertex的桥梁，描述vertex与vertex之间的关系，而property依附在vertex或edge上，填充实体或边的属性。换句话说：我们在关系型数据库中定义一个实体表时；要给这个表设定一个表名，列名及列的类型，值是否为空，是否为主键等。这和我们定义一个schema是一个概念！这样说同学你是否豁然开朗呢？
+
+&emsp;&emsp;在引用官网的一句话**Each JanusGraph graph has a schema comprised of the edge labels, property keys, and vertex labels used therein. A JanusGraph schema can either be explicitly or implicitly defined. Users are encouraged to explicitly define the graph schema during application development. An explicitly defined schema is an important component of a robust graph application and greatly improves collaborative software development. Note, that a JanusGraph schema can be evolved over time without any interruption of normal database operations. Extending the schema does not slow down query answering and does not require database downtime.** 每一个图都有一个schema，schema中的数据是由**边标签、属性键、顶点标签**组成，在创建schema时可以显示地定义（就是通过配置文件或Java定义变量）schema（图）的三个元素，也可以隐式定义，鼓励用户在应用程序开发期间显式定义图形模式。隐式定义方式通过g对象创建、通过http服务式创建等。可以参考本工程的com.example.janusgraph.referenceExample目录下的GraphOfTheGodsFactory.java和RemoteGraphApp.java 或 RemoteGraphApp.java 继承的JanusGraphApp.class 进行深刻理解，然后根据你所在的业务场景进行选择。
+
+### 创建schema
 可以根据[schema 介绍](https://github.com/bingbingll/janusgraph-example#schema-介绍)这个节点的几个类进行编写，这里我选择JanusGraphApp.class 编写形式。为什么呢？原因为操作 JanusGraph有两套 API，
 分别是 Graph Structure（结构） 和 Graph Process（处理）。 建议只用 graph Structure来做图的模型定义及数据库管理相关操作。
 图的数据操作，包括创建、更新、删除及便利都用 g（ Graph Process）来操作。如果想用 API 来大批量地操作数据，可以跳过 JanusGraph，直接写入后端存储。
 创建schema参考本工程的[CreateSchema.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/CreateSchema.java);
 图数据写入参考本工程的[GraphDataLand.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/GraphDataLand.java)
+### 加载数据
+索引创建

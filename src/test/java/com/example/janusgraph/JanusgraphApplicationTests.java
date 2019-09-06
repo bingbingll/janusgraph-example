@@ -53,7 +53,7 @@ public class JanusgraphApplicationTests {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            GraphSourceConfig.close(g, client);
+            config.close(g, client);
         }
     }
 
