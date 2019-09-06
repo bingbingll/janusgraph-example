@@ -36,9 +36,9 @@
 
 **用到的链接**
 >-- 官网地址：[官网](https://janusgraph.org/)  
->-- 官网文档：[文档](https://docs.janusgraph.org/) 或 [文档](https://docs.janusgraph.org/latest/index.html)
+>-- 官网文档：[文档](https://docs.janusgraph.org/)
 >-- 源码网址: [GitHub](https://github.com/JanusGraph/janusgraph)  
->-- 搭建形式：[官网](https://docs.janusgraph.org/latest/cassandra.html)  
+>-- 搭建形式：[官网](https://docs.janusgraph.org/basics/deployment/)  
 >-- Java-API：[官网](https://javadoc.io/doc/org.janusgraph/janusgraph-core/0.4.0)
 >
 >-- 数据存储:
@@ -124,7 +124,7 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 ### 创建schema
 可以根据[schema 介绍](https://github.com/bingbingll/janusgraph-example#schema-介绍)这个节点的几个类进行编写，这里我选择JanusGraphApp.class 编写形式。为什么呢？原因为操作 JanusGraph有两套 API，
 分别是 Graph Structure（结构） 和 Graph Process（处理）。 建议只用 graph Structure来做图的模型定义及数据库管理相关操作。
-图的数据操作，包括创建、更新、删除及便利都用 g（ Graph Process）来操作。如果想用 API 来大批量地操作数据，可以跳过 JanusGraph，直接写入后端存储。
+图的数据操作，包括创建、更新、删除及遍历都用 g（ Graph Process）来操作。如果想用 API 来大批量地操作数据，可以跳过 JanusGraph，直接写入后端存储。
 创建schema参考本工程的[CreateSchema.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/CreateSchema.java);
 图数据写入参考本工程的[GraphDataLand.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/GraphDataLand.java)
 ### 加载数据
