@@ -47,6 +47,7 @@ public class RemoteGraphApp extends JanusGraphApp {
 
     /**
      * Constructs a graph app using the given properties.
+     *
      * @param fileName location of the properties file
      */
     public RemoteGraphApp(final String fileName) {
@@ -54,6 +55,12 @@ public class RemoteGraphApp extends JanusGraphApp {
         // the server auto-commits per request, so the application code doesn't
         // need to explicitly commit transactions
         this.supportsTransactions = false;
+    }
+
+    public static void main(String[] args) {
+        final String fileName = (args != null && args.length > 0) ? args[0] : null;
+        final RemoteGraphApp app = new RemoteGraphApp(fileName);
+        app.runApp();
     }
 
     @Override
@@ -88,7 +95,8 @@ public class RemoteGraphApp extends JanusGraphApp {
 
         // see GraphOfTheGodsFactory.java
 
-        Vertex saturn = g.addV(b.of(LABEL, "titan")).property(NAME, b.of(NAME, "saturn"))
+        Vertex saturn = g.addV(b.of(LABEL, "titan"))
+                .property(NAME, b.of(NAME, "saturn"))
                 .property(AGE, b.of(AGE, 10000)).next();
         Vertex sky = g.addV(b.of(LABEL, "location")).property(NAME, b.of(NAME, "sky")).next();
         Vertex sea = g.addV(b.of(LABEL, "location")).property(NAME, b.of(NAME, "sea")).next();
@@ -186,11 +194,5 @@ public class RemoteGraphApp extends JanusGraphApp {
         // drain the results completely
         Stream<Result> futureList = resultSet.stream();
         futureList.map(Result::toString).forEach(LOGGER::info);
-    }
-
-    public static void main(String[] args) {
-        final String fileName = (args != null && args.length > 0) ? args[0] : null;
-        final RemoteGraphApp app = new RemoteGraphApp(fileName);
-        app.runApp();
     }
 }

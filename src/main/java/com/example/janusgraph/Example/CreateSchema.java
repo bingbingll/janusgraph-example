@@ -1,16 +1,12 @@
 package com.example.janusgraph.Example;
 
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.shaded.kryo.Kryo;
 import org.janusgraph.core.Cardinality;
-import org.janusgraph.core.Multiplicity;
-import org.janusgraph.core.PropertyKey;
 import org.janusgraph.core.attribute.Geoshape;
 import org.janusgraph.core.schema.JanusGraphManagement;
-import org.janusgraph.core.schema.Mapping;
-import org.janusgraph.core.schema.Parameter;
 import org.springframework.stereotype.Service;
 
 import static org.janusgraph.core.Multiplicity.MANY2ONE;
@@ -26,6 +22,9 @@ import static org.janusgraph.core.Multiplicity.MANY2ONE;
 public class CreateSchema {
 
 
+    protected boolean useMixedIndex = true;
+    protected String mixedIndexConfigName = "search";
+
     /**
      * 定义schema图的顶点（我喜欢叫这个为所属类型）； 人：person，公司：company，地点：localhost 三个顶点
      *
@@ -39,14 +38,14 @@ public class CreateSchema {
 
     /**
      * 定义属性，及图中的属性属性，可以为边，点，进行引用。
-     *使用基数（基数）来定义与任何给定顶点上的键相关联的值的允许基数。
+     * 使用基数（基数）来定义与任何给定顶点上的键相关联的值的允许基数。
      * SINGLE：对于此类密钥，每个元素最多允许一个值。换句话说，键→值映射对于图中的所有元素都是唯一的。
-     *          属性键birthDate是具有SINGLE基数的示例，因为每个人只有一个出生日期。
+     * 属性键birthDate是具有SINGLE基数的示例，因为每个人只有一个出生日期。
      * LIST：允许每个元素的任意数量的值用于此类键。换句话说，密钥与允许重复值的值列表相关联。
-     *       假设我们将传感器建模为图形中的顶点，则属性键sensorReading是LIST基数的示例，允许记录大量（可能重复的）传感器读数。
+     * 假设我们将传感器建模为图形中的顶点，则属性键sensorReading是LIST基数的示例，允许记录大量（可能重复的）传感器读数。
      * SET：允许多个值，但每个元素没有重复值用于此类键。换句话说，密钥与一组值相关联。
-     *      如果我们想要捕获个人的所有姓名（包括昵称，婚前姓名等），则属性键名称具有SET基数。
-     *
+     * 如果我们想要捕获个人的所有姓名（包括昵称，婚前姓名等），则属性键名称具有SET基数。
+     * <p>
      * 默认基数设置为SINGLE。请注意，边和属性上使用的属性键具有基数SINGLE。不支持为边或属性上的单个键附加多个值。
      *
      * @param management
@@ -69,15 +68,16 @@ public class CreateSchema {
         //公司坐标
         management.makePropertyKey(SchemaProperties.PLACE).dataType(Geoshape.class).make();
     }
+
     /**
      * 定义schema图的边；
-     *
+     * <p>
      * MULTI: 允许任何顶点对之间的同一标签的多个边。换句话说，该图是关于这种边缘标签的多图。边缘多重性没有约束。
      * SIMPLE:在任何一对顶点之间最多允许此类标签的一个边缘。换句话说，该图是关于标签的简单图。确保边缘对于给定标签和顶点对是唯一的
      * MANY2ONE:在图形中的任何顶点上最多允许此标签的一个输出，但不对入射边缘施加约束。
-     *          边缘标签母亲是MANY2ONE多样性的一个例子，因为每个人最多只有一个母亲，但母亲可以有多个孩子。
+     * 边缘标签母亲是MANY2ONE多样性的一个例子，因为每个人最多只有一个母亲，但母亲可以有多个孩子。
      * ONE2MANY:在图形中的任何顶点上最多允许此类标签的一个输入边缘，但不对输出边缘施加约束。
-     *          边缘标签winnerOf是具有ONE2MANY多样性的示例，因为每个比赛最多只能赢得一个人，但是一个人可以赢得多个比赛.
+     * 边缘标签winnerOf是具有ONE2MANY多样性的示例，因为每个比赛最多只能赢得一个人，但是一个人可以赢得多个比赛.
      * ONE2ONE:在图中的任何顶点上最多允许此标签的一个输入边和一个输出边。边缘标签结婚是一个具有ONE2ONE多样性的例子，因为一个人与另一个人结婚。
      * todo:默认设置为 MULTI。
      * todo:具体参考这位同学写的链接：https://www.cnblogs.com/jiyuqi/p/7127178.html?utm_source=itdadao&utm_medium=referral
@@ -94,8 +94,6 @@ public class CreateSchema {
         //归属，人属于哪个公司，公司中都有谁 公司地点在哪里
         management.makeEdgeLabel("belong").make();
     }
-
-
 
     /**
      * 复合索引
@@ -123,10 +121,6 @@ public class CreateSchema {
                 .addKey(management.getPropertyKey("place"))
                 .buildCompositeIndex();
     }
-
-
-    protected boolean useMixedIndex = true;
-    protected String mixedIndexConfigName = "search";
 
     /**
      * 创建混合索引

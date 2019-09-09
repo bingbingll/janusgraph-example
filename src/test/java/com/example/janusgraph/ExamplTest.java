@@ -58,8 +58,10 @@ public class ExamplTest {
     /**
      * 使用Graph Process（处理）创建数据并插入到schema数据模型中
      */
+    @Test
     public void testLand(){
         GraphTraversalSource g = graphSourceConfig.getGts4();
+//        GraphTraversalSource g = graphSourceConfig.getGts3();
         land.createElements2(g);
     }
 
