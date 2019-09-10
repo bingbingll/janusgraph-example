@@ -3,7 +3,6 @@ package com.example.janusgraph.Example;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.shaded.kryo.Kryo;
 import org.janusgraph.core.Cardinality;
 import org.janusgraph.core.attribute.Geoshape;
 import org.janusgraph.core.schema.JanusGraphManagement;

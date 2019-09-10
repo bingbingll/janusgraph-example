@@ -6,7 +6,6 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.process.traversal.Bindings;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.janusgraph.core.Cardinality;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.schema.JanusGraphManagement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,7 @@ public class GraphDataLand {
 
     @Autowired
     JanusGraphConfig janusGraphConfig;
+
     /**
      *
      */
@@ -169,28 +169,28 @@ public class GraphDataLand {
         /** 创建点与点的关系 */
 
         g.V(zhangming).as("a").V(zhanghan).addE("father").from("a").next();
-        g.V(zhangming).as("a").V(zhangxin).addE( "mother").from("a").next();
-        g.V(zhangming).as("a").V(zhaoshi).addE( "brother").from("a").next();
-        g.V(zhangming).as("a").V(apple).addE( "belong").from("a").next();
+        g.V(zhangming).as("a").V(zhangxin).addE("mother").from("a").next();
+        g.V(zhangming).as("a").V(zhaoshi).addE("brother").from("a").next();
+        g.V(zhangming).as("a").V(apple).addE("belong").from("a").next();
 
-        g.V(zhaoshi).as("a").V(zhanghan).addE( "father").from("a").next();
-        g.V(zhaoshi).as("a").V(zhangxin).addE( "mother").from("a").next();
-        g.V(zhaoshi).as("a").V(zhangming).addE( "brother").from("a").next();
-        g.V(zhaoshi).as("a").V(apple).addE( "belong").from("a").next();
-
-
-        g.V(wanglei).as("a").V(zhaoshi).addE( "brother").from("a").next();
-        g.V(wanglei).as("a").V(apple).addE( "belong").from("a").next();
-
-        g.V(lixin).as("a").V(ibm).addE( "belong").from("a").next();
-        g.V(lixin).as("a").V(liyan).addE( "brother").from("a").next();
-
-        g.V(liyan).as("a").V(lixin).addE( "brother").from("a").next();
-        g.V(liyan).as("a").V(apple).addE( "belong").from("a").next();
+        g.V(zhaoshi).as("a").V(zhanghan).addE("father").from("a").next();
+        g.V(zhaoshi).as("a").V(zhangxin).addE("mother").from("a").next();
+        g.V(zhaoshi).as("a").V(zhangming).addE("brother").from("a").next();
+        g.V(zhaoshi).as("a").V(apple).addE("belong").from("a").next();
 
 
-        g.V(apple).as("a").V(adrs1).addE( "belong").from("a").next();
-        g.V(ibm).as("a").V(adrs2).addE( "belong").from("a").next();
+        g.V(wanglei).as("a").V(zhaoshi).addE("brother").from("a").next();
+        g.V(wanglei).as("a").V(apple).addE("belong").from("a").next();
+
+        g.V(lixin).as("a").V(ibm).addE("belong").from("a").next();
+        g.V(lixin).as("a").V(liyan).addE("brother").from("a").next();
+
+        g.V(liyan).as("a").V(lixin).addE("brother").from("a").next();
+        g.V(liyan).as("a").V(apple).addE("belong").from("a").next();
+
+
+        g.V(apple).as("a").V(adrs1).addE("belong").from("a").next();
+        g.V(ibm).as("a").V(adrs2).addE("belong").from("a").next();
     }
 
     protected float[] getGeoFloatArray(float lat, float lon) {

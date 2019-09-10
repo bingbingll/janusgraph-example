@@ -47,7 +47,7 @@ public class GraphOfTheGodsFactory {
 
     public static void load(final JanusGraph graph, String mixedIndexName, boolean uniqueNameCompositeIndex) {
         if (graph instanceof StandardJanusGraph) {
-            Preconditions.checkState(mixedIndexNullOrExists((StandardJanusGraph)graph, mixedIndexName),
+            Preconditions.checkState(mixedIndexNullOrExists((StandardJanusGraph) graph, mixedIndexName),
                     ERR_NO_INDEXING_BACKEND, mixedIndexName);
         }
 

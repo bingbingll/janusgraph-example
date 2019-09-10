@@ -1,16 +1,12 @@
 package com.example.janusgraph;
 
 import com.example.janusgraph.config.GraphSourceConfig;
-import com.example.janusgraph.titExample.InitSchemaExample;
-import com.example.janusgraph.titExample.LandDataExample;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.janusgraph.core.JanusGraph;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -18,8 +14,10 @@ import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+
 public class JanusgraphApplicationTests {
-    GraphSourceConfig config=new GraphSourceConfig();
+    GraphSourceConfig config = new GraphSourceConfig();
+
     @Test
     public void testAdd() throws Exception {
         GraphTraversalSource g = config.getGts1();
@@ -62,11 +60,11 @@ public class JanusgraphApplicationTests {
         Client client = config.getClient();
         GraphTraversalSource g = config.getGts4(client);
         try {
-            g.addV("测试444").property("name","测试444","no","44444444");
+            g.addV("测试444").property("name", "测试444", "no", "44444444").next();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            config.close(g,client);
+            config.close(g, client);
 
         }
     }

@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 初始化一个schema，并设定顶点，边，属性
  */
 @Log4j2
-
+@Deprecated
 public class InitSchemaExample {
     @Autowired
     GraphSourceConfig graphSource;

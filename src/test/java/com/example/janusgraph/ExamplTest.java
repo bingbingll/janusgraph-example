@@ -6,9 +6,6 @@ import com.example.janusgraph.config.GraphSourceConfig;
 import com.example.janusgraph.config.JanusGraphConfig;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.apache.tinkerpop.gremlin.structure.Transaction;
-import org.janusgraph.core.JanusGraph;
-import org.janusgraph.core.schema.JanusGraphManagement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ public class ExamplTest {
      * 使用Graph Structure（结构）进行创建和定义数据模型
      */
     @Test
-    public void testSchema(){
+    public void testSchema() {
 
         try {
             schema.createProperties(janusGraphConfig.mgt);
@@ -49,7 +46,7 @@ public class ExamplTest {
         } catch (Exception e) {
             e.printStackTrace();
             janusGraphConfig.rollback();
-        }finally {
+        } finally {
             janusGraphConfig.close();
         }
     }
@@ -58,11 +55,11 @@ public class ExamplTest {
      * 使用Graph Process（处理）创建数据并插入到schema数据模型中
      */
     @Test
-    public void testLand(){
+    public void testLand() {
         Client client = graphSourceConfig.getClient();
         GraphTraversalSource g = graphSourceConfig.getGts4(client);
         land.createElements2(g);
-        graphSourceConfig.close(g,client);
+        graphSourceConfig.close(g, client);
     }
 
 }

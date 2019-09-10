@@ -3,19 +3,13 @@ package com.example.janusgraph.config;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
-import org.apache.tinkerpop.gremlin.driver.MessageSerializer;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
-import org.apache.tinkerpop.gremlin.driver.ser.*;
+import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
 import org.apache.tinkerpop.gremlin.structure.io.gryo.GryoMapper;
 import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
-import org.janusgraph.core.JanusGraph;
-import org.janusgraph.core.JanusGraphFactory;
-import org.janusgraph.core.attribute.Geoshape;
-import org.janusgraph.core.schema.JanusGraphManagement;
 import org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.net.URLDecoder;
@@ -35,6 +29,7 @@ public class GraphSourceConfig {
     /**
      * 基于官网介绍编写1
      * TODO:需要修改 remote-graph.properties 配置文件的gremlin.remote.driver.clusterFile=值为绝对路径
+     *
      * @return
      * @throws Exception
      */
@@ -50,6 +45,7 @@ public class GraphSourceConfig {
     /**
      * 基于官网介绍编写2
      * TODO:需要修改 remote-graph.properties 配置文件的gremlin.remote.driver.clusterFile=值为绝对路径
+     *
      * @return
      * @throws Exception
      */
@@ -64,9 +60,8 @@ public class GraphSourceConfig {
 
     /**
      * 基于官网介绍编写3
-     *
      */
-    public GraphTraversalSource getGts3()  {
+    public GraphTraversalSource getGts3() {
         GraphTraversalSource g = traversal()
                 .withRemote(
                         DriverRemoteConnection.using("172.16.2.137", 8182, "g")
@@ -75,9 +70,9 @@ public class GraphSourceConfig {
     }
 
 
-
     /**
      * 池的写法
+     *
      * @return
      */
     public Cluster getCluster() {
@@ -107,6 +102,7 @@ public class GraphSourceConfig {
 
     /**
      * 基于官网介绍编写4
+     *
      * @return
      */
     public GraphTraversalSource getGts4(Client client) {
@@ -116,8 +112,6 @@ public class GraphSourceConfig {
                 );
         return g;
     }
-
-
 
 
     public void close(GraphTraversalSource g, Client client) {

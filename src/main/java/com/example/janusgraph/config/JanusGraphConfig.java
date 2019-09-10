@@ -7,7 +7,6 @@ import org.janusgraph.core.JanusGraphFactory;
 import org.janusgraph.core.schema.JanusGraphManagement;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 /**
@@ -19,11 +18,9 @@ import java.net.URLDecoder;
 @Configuration
 @Log4j2
 public class JanusGraphConfig {
-    public final JanusGraph graph;
-
-    public final JanusGraphManagement mgt;
-
     private static final String CONFIG_FILE = "conf/janusgraph-cql-es-server.properties";
+    public final JanusGraph graph;
+    public final JanusGraphManagement mgt;
 
     /**
      * Initialize the graph and the graph management interface.
@@ -71,7 +68,7 @@ public class JanusGraphConfig {
         graph.close();
     }
 
-    public void rollback(){
+    public void rollback() {
         Transaction tx = graph.tx();
         tx.rollback();
     }

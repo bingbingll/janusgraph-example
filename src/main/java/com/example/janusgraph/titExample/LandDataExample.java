@@ -13,6 +13,7 @@ import java.util.Date;
  *
  */
 @Component
+@Deprecated
 public class LandDataExample {
 
     private final Faker faker;
