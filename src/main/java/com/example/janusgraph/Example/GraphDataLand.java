@@ -47,14 +47,10 @@ public class GraphDataLand {
         log.info("creating elements方式1 使用JanusGraphTransaction对象创建");
         JanusGraph graph = janusGraphConfig.graph;
         JanusGraphManagement mgt = graph.openManagement();
-        mgt.makePropertyKey("name").dataType(String.class).cardinality(Cardinality.SET).make();
-        mgt.makePropertyKey("age").dataType(int.class).cardinality(Cardinality.SINGLE).make();
+        /**
+         * 这里不再写了 参考本工程的GraphOfTheGodsFactory.java 类的load方法。
+         */
 
-        mgt.makeVertexLabel("");
-        mgt.makeVertexLabel("");
-
-
-        mgt.makeEdgeLabel("");
     }
 
 
