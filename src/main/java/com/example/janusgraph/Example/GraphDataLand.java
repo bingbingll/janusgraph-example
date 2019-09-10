@@ -173,30 +173,28 @@ public class GraphDataLand {
         /** 创建点与点的关系 */
 
         g.V(zhangming).as("a").V(zhanghan).addE("father").from("a").next();
-        g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, zhangxin)).addE(b.of(LABEL, "mother")).from("a").next();
-        g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, zhaoshi)).addE(b.of(LABEL, "brother")).from("a").next();
-        g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, apple)).addE(b.of(LABEL, "belong")).from("a").next();
+        g.V(zhangming).as("a").V(zhangxin).addE( "mother").from("a").next();
+        g.V(zhangming).as("a").V(zhaoshi).addE( "brother").from("a").next();
+        g.V(zhangming).as("a").V(apple).addE( "belong").from("a").next();
 
-        g.V(b.of(OUT_V, zhaoshi)).as("a").V(b.of(IN_V, zhanghan)).addE(b.of(LABEL, "father")).from("a").next();
-        g.V(b.of(OUT_V, zhaoshi)).as("a").V(b.of(IN_V, zhangxin)).addE(b.of(LABEL, "mother")).from("a").next();
-        g.V(b.of(OUT_V, zhaoshi)).as("a").V(b.of(IN_V, zhangming)).addE(b.of(LABEL, "brother")).from("a").next();
-        g.V(b.of(OUT_V, zhaoshi)).as("a").V(b.of(IN_V, apple)).addE(b.of(LABEL, "belong")).from("a").next();
-
-
-        g.V(b.of(OUT_V, wanglei)).as("a").V(b.of(IN_V, zhaoshi)).addE(b.of(LABEL, "brother")).from("a").next();
-        g.V(b.of(OUT_V, wanglei)).as("a").V(b.of(IN_V, apple)).addE(b.of(LABEL, "belong")).from("a").next();
-
-        g.V(b.of(OUT_V, lixin)).as("a").V(b.of(IN_V, ibm)).addE(b.of(LABEL, "belong")).from("a").next();
-        g.V(b.of(OUT_V, lixin)).as("a").V(b.of(IN_V, liyan)).addE(b.of(LABEL, "brother")).from("a").next();
-
-        g.V(b.of(OUT_V, liyan)).as("a").V(b.of(IN_V, lixin)).addE(b.of(LABEL, "brother")).from("a").next();
-        g.V(b.of(OUT_V, liyan)).as("a").V(b.of(IN_V, apple)).addE(b.of(LABEL, "belong")).from("a").next();
+        g.V(zhaoshi).as("a").V(zhanghan).addE( "father").from("a").next();
+        g.V(zhaoshi).as("a").V(zhangxin).addE( "mother").from("a").next();
+        g.V(zhaoshi).as("a").V(zhangming).addE( "brother").from("a").next();
+        g.V(zhaoshi).as("a").V(apple).addE( "belong").from("a").next();
 
 
-        g.V(b.of(OUT_V, apple)).as("a").V(b.of(IN_V, adrs1)).addE(b.of(LABEL, "belong")).from("a").next();
-        g.V(b.of(OUT_V, ibm)).as("a").V(b.of(IN_V, adrs2)).addE(b.of(LABEL, "belong")).from("a").next();
+        g.V(wanglei).as("a").V(zhaoshi).addE( "brother").from("a").next();
+        g.V(wanglei).as("a").V(apple).addE( "belong").from("a").next();
+
+        g.V(lixin).as("a").V(ibm).addE( "belong").from("a").next();
+        g.V(lixin).as("a").V(liyan).addE( "brother").from("a").next();
+
+        g.V(liyan).as("a").V(lixin).addE( "brother").from("a").next();
+        g.V(liyan).as("a").V(apple).addE( "belong").from("a").next();
 
 
+        g.V(apple).as("a").V(adrs1).addE( "belong").from("a").next();
+        g.V(ibm).as("a").V(adrs2).addE( "belong").from("a").next();
     }
 
     protected float[] getGeoFloatArray(float lat, float lon) {

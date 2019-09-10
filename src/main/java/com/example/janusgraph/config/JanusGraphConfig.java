@@ -67,6 +67,7 @@ public class JanusGraphConfig {
 
 
     public void close() {
+        mgt.commit();
         graph.close();
     }
 

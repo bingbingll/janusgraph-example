@@ -128,8 +128,28 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 图的数据操作，包括创建、更新、删除及遍历都用 g（ Graph Process）来操作。如果想用 API 来大批量地操作数据，可以跳过 JanusGraph，直接写入后端存储。
 创建schema参考本工程的[CreateSchema.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/CreateSchema.java);
 图数据写入参考本工程的[GraphDataLand.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/GraphDataLand.java)
-### 加载数据
-索引创建
+测试类：[ExamplTest]()
+### 数据据展示
+我们使用graphexp进行页面展示，使用nginx作为web服务器。
+1. 下载graphexp-[链接](https://github.com/bricaud/graphexp)源码，修改 graphexp.html中的，将 localhost改为Janus graph的IP地址。
+    然后将源码上传到/opt 目录下。
+2. 安装并配置nginx如下：
+    ``` 
+    server  {    
+        listen 8083;     
+        server_name 172.16.2.137;     
+        indexindex.html;    
+        location / {
+            root /opt/graphexp;
+        }
+    }
+    ```
+   然后启动或重启nginx
+3. 浏览器中访问
+   - 访问 http://172.16.2.137:8083/graphexp.html 点击”Get graphinfo”按钮，可以获取到 JanusGraph中的图数据。点击右上角“Search”检索出图 
+   - 加载罗马诸神图 为了更好地展示图的效果，通过 Gremlin Console加载 gremlin>:remoteconnect tinkerpop.serverconf/remote.yaml
+ 
+
 ### 错误总结
 1. java.lang.IllegalArgumentException: The provided key/value array length must be a multiple of two。可能是键值没有匹配上或书写错误。
 2. Caused by: io.netty.handler.codec.DecoderException: org.apache.tinkerpop.gremlin.driver.ser.SerializationException: org.apache.tinkerpop.shaded.kryo.KryoException: Encountered unregistered class ID: 65536 

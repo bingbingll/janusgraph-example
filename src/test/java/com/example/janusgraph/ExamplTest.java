@@ -41,13 +41,11 @@ public class ExamplTest {
     public void testSchema(){
 
         try {
-            JanusGraphManagement mgt = janusGraphConfig.mgt;
-            schema.createProperties(mgt);
-            schema.createVertexLabels(mgt);
-            schema.createEdgeLabels(mgt);
-            schema.createCompositeIndexes(mgt);
-            schema.createMixedIndexes(mgt);
-            mgt.commit();
+            schema.createProperties(janusGraphConfig.mgt);
+            schema.createVertexLabels(janusGraphConfig.mgt);
+            schema.createEdgeLabels(janusGraphConfig.mgt);
+            schema.createCompositeIndexes(janusGraphConfig.mgt);
+            schema.createMixedIndexes(janusGraphConfig.mgt);
         } catch (Exception e) {
             e.printStackTrace();
             janusGraphConfig.rollback();
@@ -65,7 +63,6 @@ public class ExamplTest {
         GraphTraversalSource g = graphSourceConfig.getGts4(client);
         land.createElements2(g);
         graphSourceConfig.close(g,client);
-
     }
 
 }
