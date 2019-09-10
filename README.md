@@ -138,7 +138,7 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
     server  {    
         listen 8083;     
         server_name 172.16.2.137;     
-        indexindex.html;    
+        index index.html;    
         location / {
             root /opt/graphexp;
         }
