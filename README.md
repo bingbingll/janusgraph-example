@@ -146,7 +146,7 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
     ```
    然后启动或重启nginx
 3. 浏览器中访问
-   - 访问 http://172.16.2.137:8083/graphexp.html 点击”Get graphinfo”按钮，可以获取到 JanusGraph中的图数据。点击右上角“Search”检索出图 
+   - 访问 http://172.16.2.137:8083/graphexp.html 点击”Get graphinfo”按钮，可以获取到 JanusGraph中的图数据。点击右上角“Search”按钮检索出图 
    - 加载罗马诸神图 为了更好地展示图的效果，通过 Gremlin Console加载 gremlin>:remoteconnect tinkerpop.serverconf/remote.yaml
  
 
