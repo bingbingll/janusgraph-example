@@ -172,7 +172,7 @@ public class GraphDataLand {
 
         /** 创建点与点的关系 */
 
-        g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, zhanghan)).addE(b.of(LABEL, "father")).from("a").next();
+        g.V(zhangming).as("a").V(zhanghan).addE("father").from("a").next();
         g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, zhangxin)).addE(b.of(LABEL, "mother")).from("a").next();
         g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, zhaoshi)).addE(b.of(LABEL, "brother")).from("a").next();
         g.V(b.of(OUT_V, zhangming)).as("a").V(b.of(IN_V, apple)).addE(b.of(LABEL, "belong")).from("a").next();
@@ -195,6 +195,7 @@ public class GraphDataLand {
 
         g.V(b.of(OUT_V, apple)).as("a").V(b.of(IN_V, adrs1)).addE(b.of(LABEL, "belong")).from("a").next();
         g.V(b.of(OUT_V, ibm)).as("a").V(b.of(IN_V, adrs2)).addE(b.of(LABEL, "belong")).from("a").next();
+
 
     }
 

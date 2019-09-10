@@ -4,6 +4,7 @@ import com.example.janusgraph.Example.CreateSchema;
 import com.example.janusgraph.Example.GraphDataLand;
 import com.example.janusgraph.config.GraphSourceConfig;
 import com.example.janusgraph.config.JanusGraphConfig;
+import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Transaction;
 import org.janusgraph.core.JanusGraph;
@@ -60,9 +61,11 @@ public class ExamplTest {
      */
     @Test
     public void testLand(){
-        GraphTraversalSource g = graphSourceConfig.getGts4();
-//        GraphTraversalSource g = graphSourceConfig.getGts3();
+        Client client = graphSourceConfig.getClient();
+        GraphTraversalSource g = graphSourceConfig.getGts4(client);
         land.createElements2(g);
+        graphSourceConfig.close(g,client);
+
     }
 
 }

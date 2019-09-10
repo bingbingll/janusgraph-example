@@ -71,7 +71,7 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 	1. 启动: 后台启动->`bin/cassandra -R`  前台启动-> `./cassandra`
 	2. 停止：`pgrep -f CassandraDaemon`  `kill -9 [进程号]`
 4. 下载Elasticsearch。出于安全原因，Elasticsearch必须在非root帐户下运行，所以需要手动添加用户进行启动脚本如下：
-	1. root 用户创建用户命令：`groupadd es;`、`useradd es -g es -p es;`、`chown -R es:es elasticsearch` 这一句要在janusgraph-0.4.0-hadoop2目录执行。
+	1. root 用户创建用户命令：`groupadd es;`、`useradd es -g es -p es;`、`chown -R es:es elasticsearch` 这一句要在es所在的上级目录执行。
 	2. centos需要修改以下参数；root 用户下 修改配置文件  `vi /etc/security/limits.conf` 最后一行增加 `* soft nofile 65536 * hard nofile 131072`  ，保存退出后，在修改 `vi /etc/sysctl.conf` 最后一行追加 `vm.max_map_count=655360` 然后保存退出，执行 `sysctl -p`
 	3. 后台启动： ./elastic -d
 	4. 停止：ps -ef | grep elastic kill -9 [进程号]
@@ -88,7 +88,8 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 		- `storage.cql.keyspace=janusgraphtest` 自定义库名称
 		- `index.search.backend=elasticsearch` es无需改动
 		- `index.search.hostname=127.0.0.1` 使用的是自带的无需改动，若是有别的es改位其IP即可，多个IP用,号隔开  
-	- 上面两个文件改完后保存，然后cd到/janusgraph-0.4.0-hadoop2/bin目录 输入 `nohup ./gremlin-server.sh conf/gremlin-server/gremlin-server.yaml` 进行后台启动。
+	- 上面两个文件改完后保存，然后cd到/janusgraph-0.4.0-hadoop2/bin目录 
+	输入 `nohup ./gremlin-server.sh conf/gremlin-server/gremlin-server.yaml` 后台启动。
 
 
 
@@ -129,3 +130,7 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 图数据写入参考本工程的[GraphDataLand.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/GraphDataLand.java)
 ### 加载数据
 索引创建
+### 错误总结
+1. java.lang.IllegalArgumentException: The provided key/value array length must be a multiple of two。可能是键值没有匹配上或书写错误。
+2. Caused by: io.netty.handler.codec.DecoderException: org.apache.tinkerpop.gremlin.driver.ser.SerializationException: org.apache.tinkerpop.shaded.kryo.KryoException: Encountered unregistered class ID: 65536 
+    解决办法：https://github.com/orientechnologies/orientdb-gremlin/issues/161 或 https://stackoverflow.com/questions/53202745/janusgraph-0-3-0-tinkerpop-3-3-3-java-serialization-error-after-adding-edge-us

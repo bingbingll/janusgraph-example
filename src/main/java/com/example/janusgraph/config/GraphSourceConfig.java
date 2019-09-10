@@ -5,17 +5,16 @@ import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.MessageSerializer;
 import org.apache.tinkerpop.gremlin.driver.remote.DriverRemoteConnection;
-import org.apache.tinkerpop.gremlin.driver.ser.AbstractGraphSONMessageSerializerV1d0;
-import org.apache.tinkerpop.gremlin.driver.ser.GraphSONMessageSerializerGremlinV1d0;
-import org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0;
-import org.apache.tinkerpop.gremlin.driver.ser.Serializers;
+import org.apache.tinkerpop.gremlin.driver.ser.*;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
 import org.apache.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.io.gryo.GryoMapper;
 import org.apache.tinkerpop.gremlin.structure.util.empty.EmptyGraph;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.janusgraph.core.attribute.Geoshape;
 import org.janusgraph.core.schema.JanusGraphManagement;
+import org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -82,9 +81,15 @@ public class GraphSourceConfig {
      * @return
      */
     public Cluster getCluster() {
+        GryoMapper.Builder builder = GryoMapper.build().
+                addRegistry(JanusGraphIoRegistry.getInstance());
+        GryoMessageSerializerV3d0 serializer = new GryoMessageSerializerV3d0(builder);
+        //Caused by: io.netty.handler.codec.DecoderException: org.apache.tinkerpop.gremlin.driver.ser.SerializationException: org.apache.tinkerpop.shaded.kryo.KryoException: Encountered unregistered class ID: 65536
+        //https://github.com/orientechnologies/orientdb-gremlin/issues/161
+
         //TODO:配置地址-> http://tinkerpop.apache.org/javadocs/3.4.1/core/org/apache/tinkerpop/gremlin/driver/Cluster.Builder.html
         return Cluster.build()
-                .serializer(Serializers.GRAPHSON_V2D0)
+                .serializer(serializer)
                 .maxConnectionPoolSize(20)
                 .maxInProcessPerConnection(15)
                 .maxWaitForConnection(3000)
@@ -94,6 +99,7 @@ public class GraphSourceConfig {
                 .port(8182)
                 .create();
     }
+
     public Client getClient() {
         Cluster cluster = getCluster();
         return cluster.connect();
@@ -103,10 +109,10 @@ public class GraphSourceConfig {
      * 基于官网介绍编写4
      * @return
      */
-    public GraphTraversalSource getGts4() {
+    public GraphTraversalSource getGts4(Client client) {
         GraphTraversalSource g = traversal().
                 withRemote(DriverRemoteConnection.
-                        using(getClient(), "g")
+                        using(client, "g")
                 );
         return g;
     }
