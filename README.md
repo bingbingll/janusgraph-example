@@ -114,11 +114,11 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 <font face="黑体" color=red size=4> 项目下载后需要你修改 项目的conf/gremlin.remote.driver.clusterFile属性的路径值</font>
 
 ### schema 介绍
-&emsp;&emsp;首先这里需要先了解一下Janus graph中schema的概念，若是schema概念没弄明白后续跟没法学习应用了。
+&emsp;&emsp;首先这里需要先了解一下Janus graph中schema的概念，若是schema概念没弄明白后续也就没法学习及应用了。
 若您的英语很好可以先在官网文档-[链接](https://docs.janusgraph.org/basics/schema/)-中对于schema的阐述进行了解（反正我只是看个大概脑子稀里糊涂的）。
 还可以参考[链接](https://www.cnblogs.com/jiyuqi/p/7127178.html?utm_source=itdadao&utm_medium=referral) 介绍。  
   
-&emsp;&emsp;官网文档说到**The schema type - i.e. edge label, property key,or vertex label - is assigned to elements in the graph - i.e. edge, properties or vertices respectively - when they are first created. The assigned schema type cannot be changed for a particular element. This ensures a stable type system that is easy to reason about.** 什么意思呢？根据我的理解，schema（模型）！用于描述定义一个图中的数据是什么样子的，数据依据此定义进行数据制作从而完成一个图。因此创建schema（模型）时需要先定义图中顶点（vertex）、边（edge）和属性（property）然后才能组成一个schema。在图逻辑中，vertex描述为每个单独的实体（相当于实体，抽象出来的一个类别，例如人，公司，地点等等），edge作为连接2个以上的vertex的桥梁，描述vertex与vertex之间的关系，而property依附在vertex或edge上，填充实体或边的属性。换句话说：我们在关系型数据库中定义一个实体表时；要给这个表设定一个表名，列名及列的类型，值是否为空，是否为主键等。这和我们定义一个schema是一个概念！这样说同学你是否豁然开朗呢？
+&emsp;&emsp;官网文档说到**The schema type - i.e. edge label, property key,or vertex label - is assigned to elements in the graph - i.e. edge, properties or vertices respectively - when they are first created. The assigned schema type cannot be changed for a particular element. This ensures a stable type system that is easy to reason about.** 什么意思呢？根据我的理解，schema（模型）！用于定义一个图中的数据是什么样子（换句话说就是框定数据格式），数据依据此定义进行数据制作从而完成一个图。因此创建schema（模型）时需要先定义图中顶点（vertex）、边（edge）和属性（property）然后才能组成一个schema。在图逻辑中，vertex描述为每个单独的顶点数据类型是什么（可以理解为抽象出来的一个类，例如人，公司，地点等等），edge作为连接图中2个以上的vertex的桥梁，描述图中vertex(顶点)与vertex(顶点)之间的存在的关系，而property(属性)依附在vertex或edge上，填充顶点或边的属性。换句话说：我们在关系型数据库中定义一个实体表时；要给这个表设定一个表名，列名及列的类型，值是否为空，是否为主键等。这和我们定义一个schema是一个概念！这样说同学你是否豁然开朗呢？
 
 &emsp;&emsp;在引用官网的一句话**Each JanusGraph graph has a schema comprised of the edge labels, property keys, and vertex labels used therein. A JanusGraph schema can either be explicitly or implicitly defined. Users are encouraged to explicitly define the graph schema during application development. An explicitly defined schema is an important component of a robust graph application and greatly improves collaborative software development. Note, that a JanusGraph schema can be evolved over time without any interruption of normal database operations. Extending the schema does not slow down query answering and does not require database downtime.** 每一个图都有一个schema，schema中的数据是由**边标签、属性键、顶点标签**组成，在创建schema时可以显示地定义（就是通过配置文件或Java定义变量）schema（图）的三个元素，也可以隐式定义，鼓励用户在应用程序开发期间显式定义图形模式。隐式定义方式通过g对象创建、通过http服务式创建等。可以参考本工程的com.example.janusgraph.referenceExample目录下的GraphOfTheGodsFactory.java和RemoteGraphApp.java 或 RemoteGraphApp.java 继承的JanusGraphApp.class 进行深刻理解，然后根据你所在的业务场景进行选择。
 
@@ -128,7 +128,7 @@ Janus graph可以在Linux系统或window系统下运行，两种方式运行.bat
 图的数据操作，包括创建、更新、删除及遍历都用 g（ Graph Process）来操作。如果想用 API 来大批量地操作数据，可以跳过 JanusGraph，直接写入后端存储。
 创建schema参考本工程的[CreateSchema.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/CreateSchema.java);
 图数据写入参考本工程的[GraphDataLand.java](https://github.com/bingbingll/janusgraph-example/blob/master/src/main/java/com/example/janusgraph/Example/GraphDataLand.java)
-测试类：[ExamplTest]()
+测试类：[ExamplTest](https://github.com/bingbingll/janusgraph-example/blob/master/src/test/java/com/example/janusgraph/ExamplTest.java)
 ### 数据据展示
 我们使用graphexp进行页面展示，使用nginx作为web服务器。
 1. 下载graphexp-[链接](https://github.com/bricaud/graphexp)源码，修改 graphexp.html中的，将 localhost改为Janus graph的IP地址。
